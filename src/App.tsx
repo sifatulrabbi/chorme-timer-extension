@@ -1,25 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import Header from "./components/Header";
+import TimerProvider, { useTimerContext } from "./contexts/timer.context";
+import useTimer from "./hooks/useTimer";
 
 function App() {
+  const [tab, setTab] = React.useState(0);
+  const { hours, minutes, seconds } = useTimerContext();
+  const { startTimer, stopTime, resetTimer } = useTimer();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <TimerProvider>
+      <Header tab={tab} setTab={setTab} />
+      {tab === 0 ? (
+        <div className="tab">
+          <div className="timebox">
+            <span className="hours">{hours}</span>:
+            <span className="minutes">{minutes}</span>:
+            <span className="seconds">{seconds}</span>
+          </div>
+          <div className="tab-bottom">
+            <button className="action-btn" onClick={startTimer}>
+              Start
+            </button>
+            <button className="action-btn" onClick={stopTime}>
+              Stop
+            </button>
+            <button className="action-btn" onClick={resetTimer}>
+              Reset
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="tab"></div>
+      )}
+    </TimerProvider>
   );
 }
 
